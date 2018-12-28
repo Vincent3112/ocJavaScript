@@ -62,17 +62,12 @@ listeLiens.forEach(function (lien) {
     contenu.appendChild(elementLien);
 });
 
-
-
-
-
 var affichageFormBouton  = document.getElementById("ajoutForm");
 
-
-
 var messageAjout = document.getElementById("messageAjout");
-var messageTitre = document.getElementById("messageAjout");
+var messageTitre = document.getElementById("titre");
 
+var formElmt;
 
 affichageFormBouton.addEventListener('click', function(){
     affichageFormBouton.style.display = "none";
@@ -80,10 +75,10 @@ affichageFormBouton.addEventListener('click', function(){
     document.body.insertBefore(formElmt, contenu);
     
     formElmt.addEventListener('submit', function(event){
-        formElt.style.display = "none";
+        formElmt.style.display = "none";
         affichageFormBouton.style.display = "inline-block";
         ajoutNouveauLien();
-        formElt.reset();
+        formElmt.reset();
         event.preventDefault();
     });
 })
@@ -120,4 +115,21 @@ function inputMaker(attributes){
 }
 
 
+function ajoutNouveauLien(){
+    var url = formElmt.elements.url.value;
+    var regex = /^https?:\/\/.+/i;
+    if (!regex.test(url)){
+        url = "http://" + url;
+    }
+    var lien ={
+        auteur : formElmt.elements.auteur.value,
+        titre : formElmt.elements.titre.value,
+        url : url,
+    }
+   contenu.insertBefore(creerElementLien(lien),contenu.childNodes[1]);
+    //gestion des affichages
+    messageTitre.textContent = lien.titre;
+    messageAjout.style.display = "block";
+    setTimeout(function(){messageAjout.style.display = "none";}, 2000);
 
+}
