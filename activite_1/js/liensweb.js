@@ -24,35 +24,100 @@ var listeLiens = [
     }
 ];
 
-// TODO : compléter ce fichier pour ajouter les liens à la page web
+// Crée et renvoie un élément DOM affichant les données d'un lien
+// Le paramètre lien est un objet JS représentant un lien
+function creerElementLien(lien) {
+    var titreLien = document.createElement("a");
+    titreLien.href = lien.url;
+    titreLien.style.color = "#428bca";
+    titreLien.style.textDecoration = "none";
+    titreLien.style.marginRight = "5px";
+    titreLien.appendChild(document.createTextNode(lien.titre));
 
-listeLiens.forEach( function (lien){
-    
-    var Titre = document.createElement("a");
-    var Url = document.createElement("a");
-    var Auteur = document.createElement("a");
-    var Fond = document.createElement("p");
-    
-    Fond.style.backgroundColor = "white";
-    //Url.style.margin = "15px";
-    Titre.style.color = "#428bca";
-    Url.style.color = "#blak";
-    Url.style.font = "10px";
-    
-    
-    Titre.textContent = lien.titre + "  ";
-    Url.textContent = lien.url;
-    Auteur.textContent = "Ajouté par " + lien.auteur;
-    Url.href = lien.url;
-    
+    var urlLien = document.createElement("span");
+    urlLien.appendChild(document.createTextNode(lien.url));
+
+    // Cette ligne contient le titre et l'URL du lien
     var ligneTitre = document.createElement("h4");
     ligneTitre.style.margin = "0px";
-    ligneTitre.appendChild(Titre);
-    ligneTitre.appendChild(Url);
+    ligneTitre.appendChild(titreLien);
+    ligneTitre.appendChild(urlLien);
+
+    // Cette ligne contient l'auteur
+    var ligneDetails = document.createElement("span");
+    ligneDetails.appendChild(document.createTextNode("Ajouté par " + lien.auteur));
+
+    var divLien = document.createElement("div");
+    divLien.classList.add("lien");
+    divLien.appendChild(ligneTitre);
+    divLien.appendChild(ligneDetails);
+
+    return divLien;
+}
+
+var contenu = document.getElementById("contenu");
+// Parcours de la liste des liens et ajout d'un élément au DOM pour chaque lien
+listeLiens.forEach(function (lien) {
+    var elementLien = creerElementLien(lien);
+    contenu.appendChild(elementLien);
+});
+
+
+
+
+
+var affichageFormBouton  = document.getElementById("ajoutForm");
+
+
+
+var messageAjout = document.getElementById("messageAjout");
+var messageTitre = document.getElementById("messageAjout");
+
+
+affichageFormBouton.addEventListener('click', function(){
+    affichageFormBouton.style.display = "none";
+    formElmt = creerForm();
+    document.body.insertBefore(formElmt, contenu);
     
-    //Titre.appendChild(ligneTitre);
-    Fond.appendChild(ligneTitre);
-    Fond.appendChild(Auteur);
-    
-    document.getElementById("contenu").appendChild(Fond);
+    formElmt.addEventListener('submit', function(event){
+        formElt.style.display = "none";
+        affichageFormBouton.style.display = "inline-block";
+        ajoutNouveauLien();
+        formElt.reset();
+        event.preventDefault();
     });
+})
+
+function creerForm(){
+    var formElmt = document.createElement("form");
+    formElmt.id = "ajouterLien";
+    formElmt.appendChild(inputMaker({"type":"text",
+                                "name":"auteur",
+                                "placeholder": "Entrez votre nom",
+                                "required":"required"}));
+    formElmt.appendChild(inputMaker({"type":"text",
+                                "name":"titre",
+                                "placeholder": "Entrez le titre du lien",
+                                "size": "30",
+                                "required":"required"}));
+    formElmt.appendChild(inputMaker({"type":"text",
+                                "name":"url",
+                                "placeholder": "Entrez l'URL du lien",
+                                "size" : "30",
+                                "required":"required"}));
+    formElmt.appendChild(inputMaker({"type":"submit",
+                                "name":"bouton",
+                                "value": "Ajouter"}));
+    return formElmt;
+}
+
+function inputMaker(attributes){
+    var element = document.createElement("input");
+    for (var key in attributes){
+        element.setAttribute(key, attributes[key])
+    }
+    return element;
+}
+
+
+

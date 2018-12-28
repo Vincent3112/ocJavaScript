@@ -1,12 +1,16 @@
 var compteur = 0;
 
-var fct = function(){
+var Compteur = document.getElementById("compteurClics");
+
+var fct = function() {
     compteur++;
-    document.getElementById("compteurClics").textContent = compteur;
+    Compteur.textContent = compteur;
 };
-    
-var elmtBoutton = document.getElementById("clic");
 
-elmtBoutton.addEventListener("click", fct );
+document.getElementById("clic").addEventListener("click", fct);
 
+document.getElementById("desactiver").addEventListener("click", fct2);
 
+var fct2 = function(){
+    document.getElementById("clic").removeEventListener("click", fct);
+};
